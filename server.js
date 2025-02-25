@@ -1,26 +1,45 @@
 
 import express from 'express';
 import db from './db/db.js';
-import userRouter from './routes/userRoutes.js';
+import app from './app.js';
+import chalk from 'chalk';
 
 
-const app = express();
+
 const port = process.env.PORT || 8000;
 
 // mongoose.connect(process.env.MONGO_URI, { dbName: 'unityConnect' })
-await db();
 
-app.use(express.json());
+let server;
 
-app.get('/', (req, res) => {
-  res.json({ msg: 'Running' });
+db()
+  .then(() => {
+    server = app.listen(port, () => console.log(chalk.bgGreen(` Personal Library API listening on port ${port}... `)));
+  })
+  .catch((err) => {
+    console.log(chalk.red(err.message));
+    process.exit(1);
+  });
+
+process.on('uncaughtException', (err) => {
+  console.log('UNCAUGHT EXCEPTION! Shutting down...');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
-app.use('/users', userRouter);
-
-
-app.use((err, req, res, next) => {
-  res.status(err.statusCode || 500).json({ msg: err.message });
+process.on('unhandledRejection', (err) => {
+  console.log('UNHANDLED REJECTION');
+  console.log(err.name, err.message);
+  server.close(() => {
+    process.exit(1);
+  });
 });
 
-app.listen(port, () => console.log(`Listening on port ${port}`));
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+  });
+});
