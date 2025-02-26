@@ -1,7 +1,7 @@
 
 import asyncHandler from '../utils/asyncHandler.js';
 import ErrorResponse from '../utils/ErrorResponse.js';
-import UserSchema from '../schemas/User.js';
+import UserModel from '../models/UserModell.js';
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await UserSchema.find().lean();

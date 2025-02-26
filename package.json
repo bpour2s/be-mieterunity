@@ -1,5 +1,5 @@
 {
-  "name": "Backend-be-mieterunity",
+  "name": "be-mieterunity",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "bcrypt": "^5.1.1",
     "chalk": "^5.4.1",
     "cors": "^2.8.5",
     "express": "^4.21.2",

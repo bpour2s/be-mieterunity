@@ -1,20 +1,20 @@
-import {Router} from 'express';
-import User from '../schemas/User.js';
+import { Router } from 'express';
+import UserModel from '../models/UserModel.js';
+import { getAll, getOneById, createOne, updateOne, deleteOne } from '../controllers/crudFactory.js';
+import { userSignup, userLogin, userLogout } from '../controllers/authControllers.js';
 
-export const userRouter = Router();
+const userRouter = Router();
 
-userRouter.post('/', async(req,res,next) => {
+userRouter.get('/', getAll(UserModel));
+userRouter.get('/:id', getOneById(UserModel));
+userRouter.post('/', createOne(UserModel));
+userRouter.put('/:id', updateOne(UserModel));
+userRouter.delete('/:id', deleteOne(UserModel));
 
-    const { email} = req.body;
+userRouter.post('/signup', userSignup);
+userRouter.post('/login', userLogin);
+userRouter.post('/logout', userLogout);
 
-    try {
-        const user = await User.create({email});
 
-        res.status(201).json({User});
-    } catch (error) {
-        next(error);
-        
-    }
-})
 
 export default userRouter;

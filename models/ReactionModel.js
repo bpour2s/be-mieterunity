@@ -1,4 +1,4 @@
-import {Schema, model} from 'mongoose';
+import { Schema, model } from 'mongoose';
 
 const ReactionSChema = new Schema({
 
@@ -6,10 +6,14 @@ const ReactionSChema = new Schema({
         type: String,
         trim: true
     },
- },{
+    count: {
+        type: Number,
+        default: 0,
+    },
+},
+    {
         timestamps: true
-    
-});
+    });
 
 
 const Reaction = model('Reaction', ReactionSChema);

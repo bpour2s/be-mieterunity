@@ -3,7 +3,7 @@ import { Schema, model } from 'mongoose';
 
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 const urlPattern = /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
-const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+//const passwordPattern = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
 
 const UserSchema = new Schema({
@@ -36,7 +36,8 @@ const UserSchema = new Schema({
     password: {
         type: String,
         required: true,
-        match: [passwordPattern, 'Please provide a proper password'],
+        select: false,
+        //match: [passwordPattern, 'Please provide a proper password'],
     },
 
     locations: [{

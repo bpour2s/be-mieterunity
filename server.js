@@ -14,7 +14,7 @@ let server;
 
 db()
   .then(() => {
-    server = app.listen(port, () => console.log(chalk.bgGreen(` Personal Library API listening on port ${port}... `)));
+    server = app.listen(port, () => console.log(chalk.bgGreen(` MieterUnity API listening on port ${port}... `)));
   })
   .catch((err) => {
     console.log(chalk.red(err.message));
