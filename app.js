@@ -11,6 +11,7 @@ import roleRouter from "./routes/roleRouter.js";
 import messageRouter from "./routes/massageRouter.js";
 import categoryRouter from "./routes/categoryRouter.js";
 import addressRouter from "./routes/addressRouter.js";
+import reactionRouter from "./routes/reactionRouter.js";
 
 const app = express();
 const morganFormat = ":method :url :status :response-time ms";
@@ -40,6 +41,7 @@ app.use("/roles", roleRouter);
 app.use("/messages", messageRouter);
 app.use("/categories", categoryRouter);
 app.use("/addresses", addressRouter);
+app.use("/reactions", reactionRouter);
 
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`Cannot find ${req.originalUrl}`, 404));
