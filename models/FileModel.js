@@ -1,4 +1,5 @@
 import { Schema, model } from "mongoose";
+import { UserModel } from "./UserModel.js";
 
 const FileSchema = new Schema(
   {
@@ -32,8 +33,8 @@ const FileSchema = new Schema(
 
     createdByUserId: {
       type: Schema.Types.ObjectId,
-      ref: "users",
-      //   required: true,
+      ref: "UserModel",
+      // required: true,
     },
   },
   {
