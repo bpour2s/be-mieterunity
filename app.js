@@ -13,6 +13,7 @@ import categoryRouter from "./routes/categoryRouter.js";
 import addressRouter from "./routes/addressRouter.js";
 import reactionRouter from "./routes/reactionRouter.js";
 import fileRouter from "./routes/fileRouter.js";
+import threadRouter from "./routes/threadRouter.js";
 
 const app = express();
 const morganFormat = ":method :url :status :response-time ms";
@@ -44,6 +45,7 @@ app.use("/categories", categoryRouter);
 app.use("/addresses", addressRouter);
 app.use("/reactions", reactionRouter);
 app.use("/files", fileRouter);
+app.use("/threads", threadRouter);
 
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`Cannot find ${req.originalUrl}`, 404));
