@@ -17,8 +17,14 @@ const UserSchema = new Schema({
         ref: 'Role', // Verweist auf das Role-Modell
        // required: true
     },
-    firstName: String,
-    lastName: String,
+
+    firstName:{
+        type: String
+    }, 
+    
+    lastName: {
+        type: String
+    },
 
     userName: {
         type: String,
@@ -91,5 +97,5 @@ const UserSchema = new Schema({
 });
 
 
-const User = model('User', UserSchema);
-export default User;
+export const UserModel = model('users', UserSchema);
+export default UserModel;
