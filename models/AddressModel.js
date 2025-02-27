@@ -37,7 +37,7 @@ const AddressSchema = new Schema(
       required: true,
     },
 
-    lan: {
+    lat: {
       type: Number,
       required: true,
     },
