@@ -1,16 +1,19 @@
-import { Router } from 'express';
-import AddressRouter from '../models/AddressModel.js';
-import {getAll, getOneById, createOne, updateOne, deleteOne} from '../controllers/crudFactory.js';
+import { Router } from "express";
+import AddressModel from "../models/AddressModel.js";
+import {
+  getAll,
+  getOneById,
+  createOne,
+  updateOne,
+  deleteOne,
+} from "../controllers/crudFactory.js";
 
+const addressRouter = Router();
 
-    const addressRouter = Router();
-    
-
-    addressRouter.get('/', getAll(AddressRouter));
-    addressRouter.get('/:id', getOneById(AddressRouter));
-    addressRouter.post('/', createOne(AddressRouter));
-    addressRouter.put('/:id', updateOne(AddressRouter));
-    addressRouter.delete('/:id', deleteOne(AddressRouter));
-
+addressRouter.get("/", getAll(AddressModel));
+addressRouter.get("/:id", getOneById(AddressModel));
+addressRouter.post("/", createOne(AddressModel));
+addressRouter.put("/:id", updateOne(AddressModel));
+addressRouter.delete("/:id", deleteOne(AddressModel));
 
 export default addressRouter;
