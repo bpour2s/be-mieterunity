@@ -6,6 +6,7 @@ const ReactionSchema = new Schema(
       type: String,
       trim: true,
     },
+
     text: {
       type: String,
       trim: true,

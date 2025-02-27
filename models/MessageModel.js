@@ -1,4 +1,6 @@
 import { Schema, model } from "mongoose";
+import { UserModel } from "./UserModel.js";
+import { ReactionModel } from "./ReactionModel.js";
 
 const MessageSchema = new Schema(
   {
@@ -7,21 +9,22 @@ const MessageSchema = new Schema(
     },
     fromUserId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "UserModel",
+      required: true,
     },
     toUserId: {
       type: Schema.Types.ObjectId,
-      ref: "User",
+      ref: "UserModel",
     },
     reactions: [
       {
         userId: {
           type: Schema.Types.ObjectId,
-          ref: "User",
+          ref: "UserModel",
         },
         reactionId: {
           type: Schema.Types.ObjectId,
-          ref: "Reaction",
+          ref: "ReactionModel",
         },
 
         status: {

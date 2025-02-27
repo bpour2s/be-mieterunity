@@ -34,7 +34,7 @@ const FileSchema = new Schema(
     createdByUserId: {
       type: Schema.Types.ObjectId,
       ref: "UserModel",
-      // required: true,
+      required: true,
     },
   },
   {
