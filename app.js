@@ -8,8 +8,8 @@ import ErrorResponse from "./utils/ErrorResponse.js";
 
 import userRouter from "./routes/userRouter.js";
 import roleRouter from "./routes/roleRouter.js";
-import messageController from "./controllers/messageControllers.js";
 import messageRouter from "./routes/massageRouter.js";
+import categoryRouter from "./routes/categoryRouter.js";
 
 const app = express();
 const morganFormat = ":method :url :status :response-time ms";
@@ -37,6 +37,7 @@ app.use(express.json());
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
 app.use("/messages", messageRouter);
+app.use("/category", categoryRouter);
 
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`Cannot find ${req.originalUrl}`, 404));
