@@ -45,6 +45,6 @@ const ThreadSchema = new Schema(
   }
 );
 
-const ThreadModel = model("threads", ThreadSchema);
+export const ThreadModel = model("threads", ThreadSchema);
 
 export default ThreadModel;

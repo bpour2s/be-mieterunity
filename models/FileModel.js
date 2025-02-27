@@ -42,5 +42,5 @@ const FileSchema = new Schema(
   }
 );
 
-const FileModel = model("files", FileSchema);
+export const FileModel = model("files", FileSchema);
 export default FileModel;
