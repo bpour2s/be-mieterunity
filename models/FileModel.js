@@ -1,51 +1,45 @@
-import { required } from 'joi';
-import { Schema, model } from 'monngoose';
+import { Schema, model } from "mongoose";
 
-const FileSchema = new Schema({
-
+const FileSchema = new Schema(
+  {
     title: {
-        type: String,
-        required: true,
-        trim: true
-
+      type: String,
+      required: true,
+      trim: true,
     },
 
     originalFileName: {
-        type: String,
-        trim: true,
-
+      type: String,
+      trim: true,
     },
 
     storedFileName: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
 
     mimeType: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
 
     icon: {
-        type: String,
-        trim: true,
+      type: String,
+      trim: true,
     },
 
     createdByUserId: {
-
-        type: Schema.Types.objectId,
-        ref: 'User',
-        required: true
+      type: Schema.Types.ObjectId,
+      ref: "users",
+      //   required: true,
     },
-},
-    {
-        timestamps: true,
-    });
+  },
+  {
+    timestamps: true,
+  }
+);
 
-const File = model('File', FileSchema);
-export default File;
-
-
-
+const FileModel = model("files", FileSchema);
+export default FileModel;
