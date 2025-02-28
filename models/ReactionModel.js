@@ -1,20 +1,21 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const ReactionSChema = new Schema({
-
+const ReactionSchema = new Schema(
+  {
     symbol: {
-        type: String,
-        trim: true
+      type: String,
+      trim: true,
     },
-    count: {
-        type: Number,
-        default: 0,
+
+    text: {
+      type: String,
+      trim: true,
     },
-},
-    {
-        timestamps: true
-    });
+  },
+  {
+    timestamps: true,
+  }
+);
 
-
-const Reaction = model('Reaction', ReactionSChema);
-export default Reaction; 
+export const ReactionModel = model("reactions", ReactionSchema);
+export default ReactionModel;
