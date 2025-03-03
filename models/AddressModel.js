@@ -11,12 +11,6 @@ const AddressSchema = new Schema(
       trim: true,
     },
 
-    compactAddress: {
-      type: String,
-      required: true,
-      trim: true,
-    },
-
     houseNr: {
       type: String,
       required: true,
@@ -28,7 +22,6 @@ const AddressSchema = new Schema(
       required: true,
       trim: true,
       //match: [postalCodePattern, "Postleitzahl muss 5 Ziffern enthalten"],
-
     },
 
     city: {

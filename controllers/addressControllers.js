@@ -1,7 +1,9 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
+
 import AddressModel from "../models/AddressModel.js";
-//import { geocodeAddress } from "../utils/geocode.js";
+
+import { GeoCodeApi } from "../utils/GeoCodeApi.js";
 
 const getAllAddress = asyncHandler(async (req, res, next) => {
   const addresses = await AddressModel.find().lean();
@@ -15,46 +17,62 @@ const getAddressById = asyncHandler(async (req, res, next) => {
   res.json({ data: address });
 });
 
-
-// Neue Adresse erstellen
 const createAddress = asyncHandler(async (req, res, next) => {
   const { street, houseNr, postalCode, city, country } = req.body;
 
-  // Überprüfen, ob die Adresse bereits existiert
-  const existingAddress = await AddressModel.findOne({
+  const isVerifiedAddress = await GeoCodeApi(
     street,
     houseNr,
     postalCode,
     city,
-    country,
-  });
-   const addressZiel = street + houseNr + postalCode + city + country;
-    const addressInUse = await AddressModel.exists({ addressZiel });
-    if (addressInUse) throw new ErrorResponse("Address already in use", 409);
+    country
+  );
 
+  if (!isVerifiedAddress) {
+    throw new ErrorResponse("Addresse konnte nicht verifiziert werden.", 409);
+  }
 
+  console.log("35 verified Address :", isVerifiedAddress);
 
-  // Geokodierung der Adresse
-  const { lat, lon } = await geocodeAddress(street, houseNr, postalCode, city, country);
+  let foundAddress = null;
 
-  // Neue Adresse in der Datenbank speichern
-  const newAddress = new AddressModel({
-    street,
-    compactAddress : street + houseNr + postalCode + city + country,
-    houseNr,
-    postalCode,
-    city,
-    country,
-    lat,
-    lon,
-  });
+  try {
+    foundAddress = await AddressModel.find({
+      lat: isVerifiedAddress.lat,
+      lon: isVerifiedAddress.lon,
+    });
+  } catch (err) {
+    throw new ErrorResponse("Fehler in der Verbindung mit der Datenbank", 400);
+  }
 
-  const savedAddress = await newAddress.save();
+  console.log("48 body : ", req.body);
+  console.log("49 gefundene Adresse: ", foundAddress);
 
-  res.status(201).json({
-    message: "Adresse erfolgreich erstellt und geokodiert",
-    data: savedAddress,
-  });
+  if (!foundAddress) {
+    req.body = {
+      ...req.body,
+      lat: isVerifiedAddress.lat,
+      lon: isVerifiedAddress.lon,
+    };
+
+    console.log("58 body : ", req.body);
+
+    try {
+      const address = await AddressModel.create(req.body);
+
+      console.log("63 adresse wird erstellt:", address);
+
+      res.status(201).json({ data: address });
+      return;
+    } catch (err) {
+      throw new ErrorResponse(
+        "Fehler in der Verbindung mit der Datenbank",
+        400
+      );
+    }
+  }
+
+  res.status(200).json({ data: foundAddress });
 });
 
 const updateAddress = asyncHandler(async (req, res, next) => {
@@ -80,5 +98,3 @@ export {
   updateAddress,
   deleteAddress,
 };
-
-

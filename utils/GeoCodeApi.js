@@ -1,7 +1,8 @@
-// utils/geocode.js
 import axios from "axios";
 
 const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org/search";
+
+const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
  * Geokodiert eine Adresse und gibt die lat/lon zurück.
@@ -12,7 +13,9 @@ const NOMINATIM_API_URL = "https://nominatim.openstreetmap.org/search";
  * @param {string} country
  * @returns {Object} { lat, lon }
  */
-export const geocodeAddress = async (street, houseNr, postalCode, city, country) => {
+export async function GeoCodeApi(street, houseNr, postalCode, city, country) 
+{
+  await sleep(1000);
   const addressString = `${street}, ${houseNr}, ${postalCode}, ${city}, ${country}`;
 
   try {
@@ -32,9 +35,10 @@ export const geocodeAddress = async (street, houseNr, postalCode, city, country)
 
     const { lat, lon } = response.data[0];
     return { lat, lon };
-
   } catch (error) {
     console.error("Fehler bei der Geokodierung:", error.message);
     throw new Error("Fehler bei der Geokodierung.");
   }
-};
+}
+
+export default { GeoCodeApi };
