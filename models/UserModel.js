@@ -10,6 +10,26 @@ const urlPattern =
 const passwordPattern =
   /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
 
+
+  const locationsObject = new Schema({
+      addressRefId: {
+        type: Schema.Types.ObjectId,
+        ref: "AddressModel",
+
+      },
+
+    });
+
+     const threadsObject = new Schema({
+      threadRefId: {
+      type: Schema.Types.ObjectId,
+      ref: "ThreadModel", // Verweist auf das Thread-Modell
+
+      }
+
+    });
+
+
 const UserSchema = new Schema(
   {
     isFirstLogin: {
@@ -49,62 +69,51 @@ const UserSchema = new Schema(
       match: [passwordPattern, "Please provide a proper password"],
     },
 
-    locations: [
-      {
-        addressId: {
-          type: Schema.Types.ObjectId,
-          ref: "AddressModel",
-        },
-      },
-    ],
+    
+    locations : [locationsObject],
+  
 
-    tokens: [
-      {
-        accessToken: {
-          type: String,
-          required: true,
-        },
-      },
-    ],
-
-    role: {
+tokens: [
+  {
+    accessToken: {
       type: String,
+      required: true,
+    },
+  },
+],
+
+  role: {
+  type: String,
       enum: ["user", "admin"],
       default: "user",
     },
 
-    images: {
-      type: String,
+images: {
+  type: String,
       default:
-        "https://res.cloudinary.com/dvniua4ab/image/upload/c_crop,h_200,q_63,r_30,w_200/v1738597956/doh3dd3gliqihwvudapz.avif",
-      match: [urlPattern, "Please provide a proper URL"],
+  "https://res.cloudinary.com/dvniua4ab/image/upload/c_crop,h_200,q_63,r_30,w_200/v1738597956/doh3dd3gliqihwvudapz.avif",
+    match: [urlPattern, "Please provide a proper URL"],
     },
 
-    threads: [
-      {
-        threadId: {
-          type: Schema.Types.ObjectId,
-          ref: "ThreadModel", // Verweist auf das Thread-Modell
-        },
-      },
-    ],
+threads: [threadsObject],
+ 
 
-    profilImageId: {
-      type: Schema.Types.ObjectId,
-      ref: "FileModel", // Verweist auf das File-Modell
+  profilImageId: {
+  type: Schema.Types.ObjectId,
+    ref: "FileModel", // Verweist auf das File-Modell
     },
 
-    isAccountDeleted: {
-      type: Boolean,
+isAccountDeleted: {
+  type: Boolean,
       default: false,
     },
-    lastLogin: {
-      type: Date,
+lastLogin: {
+  type: Date,
       default: null,
     },
   },
-  {
-    timestamps: true,
+{
+  timestamps: true,
   }
 );
 
