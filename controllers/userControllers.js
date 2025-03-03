@@ -3,25 +3,25 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 import UserModel from "../models/UserModel.js";
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
-  const users = await UserSchema.find().lean();
+  const users = await UserModel.find().lean();
   res.json({ data: users });
 });
 
 const getUserById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await UserSchema.findById(id).lean();
+  const user = await UserModel.findById(id).lean();
   if (!user) throw new ErrorResponse("User not found", 404);
   res.json({ data: user });
 });
 
 const createUser = asyncHandler(async (req, res, next) => {
-  const user = await UserSchema.create(req.body);
+  const user = await UserModel.create(req.body);
   res.status(201).json({ data: user });
 });
 
 const updateUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await UserSchema.findByIdAndUpdate(id, req.body, {
+  const user = await UserModel.findByIdAndUpdate(id, req.body, {
     runValidators: true,
     new: true,
   });
@@ -30,9 +30,24 @@ const updateUser = asyncHandler(async (req, res, next) => {
 
 const deleteUser = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await UserSchema.findByIdAndDelete(id);
+  const user = await UserModel.findByIdAndDelete(id);
   if (!user) throw new ErrorResponse("User not found", 404);
   res.json({ msg: `Successfully deleted`, data: user });
 });
 
-export { getAllUsers, getUserById, createUser, updateUser, deleteUser };
+const getAllLocationsFromUserById = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await UserModel.findById(id).lean();
+  if (!user) throw new ErrorResponse("User not found", 404);
+  console.log(user.locations);
+  res.json({ data: user.locations });
+});
+
+export {
+  getAllUsers,
+  getUserById,
+  createUser,
+  updateUser,
+  deleteUser,
+  getAllLocationsFromUserById,
+};

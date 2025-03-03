@@ -1,7 +1,6 @@
-export default function errorHandler(err, req, res, next) {
-    if (process.env.NODE_ENV === 'development') {
-      console.log(err.stack);
-    }
-  
-    res.status(err.statusCode || 500).json({ msg: err.message });
+export default class ErrorResponse extends Error {
+  constructor(message, statusCode) {
+    super(message);
+    this.statusCode = statusCode;
   }
+}
