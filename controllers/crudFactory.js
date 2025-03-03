@@ -1,7 +1,6 @@
-
-import asyncHandler from '../utils/asyncHandler.js';
-import ErrorResponse from '../utils/ErrorResponse.js';
-import UserModel from '../models/UserModel.js';
+import asyncHandler from "../utils/asyncHandler.js";
+import ErrorResponse from "../utils/ErrorResponse.js";
+import UserModel from "../models/UserModel.js";
 
 const getAll = (Model) =>
   asyncHandler(async (req, res, next) => {
@@ -11,6 +10,7 @@ const getAll = (Model) =>
 
 const getOneById = (Model) =>
   asyncHandler(async (req, res, next) => {
+    console.log("Hier");
     const { id } = req.params;
     const data = await Model.findById(id).lean();
     if (!data) throw new ErrorResponse(`${Model.modelName} not found`, 404);
@@ -26,8 +26,11 @@ const createOne = (Model) =>
 const updateOne = (Model) =>
   asyncHandler(async (req, res, next) => {
     const { id } = req.params;
-    const data = await Model.findByIdAndUpdate(id, req.body, { runValidators: true, new: true });
-    res.json({ msg: 'Update successful', data });
+    const data = await Model.findByIdAndUpdate(id, req.body, {
+      runValidators: true,
+      new: true,
+    });
+    res.json({ msg: "Update successful", data });
   });
 
 const deleteOne = (Model) =>
