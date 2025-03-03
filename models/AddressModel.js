@@ -1,53 +1,51 @@
-import { Schema, model } from 'mongoose';
+import { Schema, model } from "mongoose";
 
-const AdressSchema = new Schema({
-
+const AddressSchema = new Schema(
+  {
     street: {
-        type: String,
-        required: true,
-        trime: true
+      type: String,
+      required: true,
+      trime: true,
     },
 
-    housNr: {
-        type: String,
-        required: true,
-        trim: true
-
+    houseNr: {
+      type: String,
+      required: true,
+      trim: true,
     },
 
     postalCode: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
 
     city: {
-        type: String,
-        required: true,
-        trim: true
+      type: String,
+      required: true,
+      trim: true,
     },
 
     country: {
-        type: String,
-        default: 'Germany',
-        trim: true
-
+      type: String,
+      default: "Germany",
+      trim: true,
     },
 
     lon: {
-        type: Number,
-        required: true
+      type: Number,
+      required: true,
     },
 
-    lan: {
-        type: Number,
-        required: true
+    lat: {
+      type: Number,
+      required: true,
     },
-}, {
-
+  },
+  {
     timestamps: true,
-});
+  }
+);
 
-const Address = model('Adress', AdressSchema);
-export default Address;
-
+export const AddressModel = model("address", AddressSchema);
+export default AddressModel;
