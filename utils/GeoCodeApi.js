@@ -13,8 +13,7 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
  * @param {string} country
  * @returns {Object} { lat, lon }
  */
-export async function GeoCodeApi(street, houseNr, postalCode, city, country) 
-{
+export async function GeoCodeApi(street, houseNr, postalCode, city, country) {
   await sleep(1000);
   const addressString = `${street}, ${houseNr}, ${postalCode}, ${city}, ${country}`;
 
@@ -26,6 +25,11 @@ export async function GeoCodeApi(street, houseNr, postalCode, city, country)
         addressdetails: 1,
         limit: 1,
         "User-Agent": "Mieterunity/1.0 (bahmanhmilani@googlemail.com)",
+      },
+      headers: {
+        "Accept-Language": "DE-DE",
+        "Content-Language": "de-DE",
+        "Content-Type": "application/json",
       },
     });
 

@@ -11,12 +11,9 @@ const passwordPattern =
 const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
 export const userSignup = asyncHandler(async (req, res) => {
-  console.log("Request - Signup", req.body);
-
   const { email, password } = req.body;
 
   if (!email.match(emailPattern)) {
-    console.log("Error: Email not valid");
     return res.status(400).json({
       error: "invalid_email",
       message: "Die E-Mail-Adresse ist ungültig.",
@@ -24,7 +21,6 @@ export const userSignup = asyncHandler(async (req, res) => {
   }
 
   if (!password.match(passwordPattern)) {
-    console.log("Error: Password not valid");
     return res.status(400).json({
       error: "invalid_password",
       message:
@@ -35,7 +31,6 @@ export const userSignup = asyncHandler(async (req, res) => {
   const emailInUse = await UserModel.exists({ email });
 
   if (emailInUse) {
-    console.log("Email already in use");
     return res.status(409).json({
       error: "email in use",
       message: "Diese E-Mail-Adresse ist bereits registriert.",
@@ -56,15 +51,10 @@ export const userSignup = asyncHandler(async (req, res) => {
   const token = signToken(user._id);
   setAuthCookie(res, token);
 
-  console.log("User : ", user);
-  console.log("Token :", token);
-
   res.status(201).json({ user, token });
 });
 
 export const userLogin = asyncHandler(async (req, res) => {
-  console.log("Request - Login", req);
-
   const { email, password } = req.body;
 
   const user = await UserModel.findOne({ email }).select("+password").lean();
@@ -85,16 +75,12 @@ export const userLogin = asyncHandler(async (req, res) => {
 });
 
 export const userLogout = (req, res) => {
-  console.log("Request - Logout", req);
-
   res.clearCookie("token");
 
   res.json({ msg: "Logout successful" });
 };
 
 export const getMe = (req, res) => {
-  console.log("Request - getMe", req);
-
   const { user } = req;
 
   res.json({ user });

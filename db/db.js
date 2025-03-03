@@ -8,8 +8,6 @@ export default async function db() {
     });
     console.log(chalk.cyan(`DB connected to ${mongo.connection.name}`));
   } catch (error) {
-    console.log("Error - DB-Connection:", error.message);
-
     throw new Error("DB connection faild. Shouting down...");
   }
 }

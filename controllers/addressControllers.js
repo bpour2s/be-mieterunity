@@ -32,7 +32,7 @@ const createAddress = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("Addresse konnte nicht verifiziert werden.", 409);
   }
 
-  console.log("35 verified Address :", isVerifiedAddress);
+  
 
   let foundAddress = null;
 
@@ -45,22 +45,21 @@ const createAddress = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("Fehler in der Verbindung mit der Datenbank", 400);
   }
 
-  console.log("48 body : ", req.body);
-  console.log("49 gefundene Adresse: ", foundAddress);
+  
 
-  if (!foundAddress) {
+  if (!foundAddress.length) {
     req.body = {
       ...req.body,
       lat: isVerifiedAddress.lat,
       lon: isVerifiedAddress.lon,
     };
 
-    console.log("58 body : ", req.body);
+    
 
     try {
       const address = await AddressModel.create(req.body);
 
-      console.log("63 adresse wird erstellt:", address);
+      
 
       res.status(201).json({ data: address });
       return;

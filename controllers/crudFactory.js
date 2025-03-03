@@ -10,7 +10,6 @@ const getAll = (Model) =>
 
 const getOneById = (Model) =>
   asyncHandler(async (req, res, next) => {
-    console.log("Hier");
     const { id } = req.params;
     const data = await Model.findById(id).lean();
     if (!data) throw new ErrorResponse(`${Model.modelName} not found`, 404);

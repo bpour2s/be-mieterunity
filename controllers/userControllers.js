@@ -43,7 +43,7 @@ const getAllLocationsFromUserById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const user = await UserModel.findById(id).lean();
   if (!user) throw new ErrorResponse("User not found", 404);
-  console.log(user.locations);
+
   res.json({ data: user.locations });
 });
 
