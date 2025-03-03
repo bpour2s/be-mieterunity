@@ -2,6 +2,16 @@ import { Schema, model } from "mongoose";
 import { UserModel } from "./UserModel.js";
 import { AddressModel } from "./AddressModel.js";
 
+
+const messagesObject = new Schema({
+
+  messagesRefId: {
+      type: Schema.Types.ObjectId, // Objekt-ID für eine Nachricht
+      ref: "MessageModel", // Verweist auf das Message-Modell
+  },
+
+});
+
 const ThreadSchema = new Schema(
   {
     addressId: {
@@ -22,12 +32,8 @@ const ThreadSchema = new Schema(
       trim: true,
     },
 
-    messages: [
-      {
-        type: Schema.Types.ObjectId, // Objekt-ID für eine Nachricht
-        ref: "MessageModel", // Verweist auf das Message-Modell
-      },
-    ],
+    messages: [messagesObject],
+     
 
     createdFromUserId: {
       type: Schema.Types.ObjectId, // Verweis auf den Benutzer, der den Thread erstellt hat
