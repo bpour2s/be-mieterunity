@@ -1,6 +1,9 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 import UserModel from "../models/UserModel.js";
+import AddressModel from "../models/AddressModel.js";
+import ThreadModel from "../models/ThreadModel.js";
+import FileModel from "../models/FileModel.js";
 
 const getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await UserModel.find().lean();
@@ -10,6 +13,7 @@ const getAllUsers = asyncHandler(async (req, res, next) => {
 const getUserById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
   const user = await UserModel.findById(id).lean();
+
   if (!user) throw new ErrorResponse("User not found", 404);
   res.json({ data: user });
 });
@@ -43,6 +47,41 @@ const getAllLocationsFromUserById = asyncHandler(async (req, res, next) => {
   res.json({ data: user.locations });
 });
 
+const getUserWithAddresses = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await UserModel.findById(id)
+    .populate({ path: "locations", model: AddressModel })
+    .lean();
+
+  if (!user) throw new ErrorResponse("User not found", 404);
+  res.json({ data: user });
+});
+
+const getUserWithAddressesAndThreads = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await UserModel.findById(id)
+    .populate({ path: "locations", model: AddressModel })
+    .populate({ path: "threads", model: ThreadModel })
+    .lean();
+
+  if (!user) throw new ErrorResponse("User not found", 404);
+  res.json({ data: user });
+});
+
+const getUserWithAddressesAndThreadsAndImages = asyncHandler(
+  async (req, res, next) => {
+    const { id } = req.params;
+    const user = await UserModel.findById(id)
+      .populate({ path: "locations", model: AddressModel })
+      .populate({ path: "threads", model: ThreadModel })
+      .populate({ path: "images", model: FileModel })
+      .lean();
+
+    if (!user) throw new ErrorResponse("User not found", 404);
+    res.json({ data: user });
+  }
+);
+
 export {
   getAllUsers,
   getUserById,
@@ -50,4 +89,7 @@ export {
   updateUser,
   deleteUser,
   getAllLocationsFromUserById,
+  getUserWithAddresses,
+  getUserWithAddressesAndThreads,
+  getUserWithAddressesAndThreadsAndImages,
 };

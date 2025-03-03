@@ -46,10 +46,9 @@ const UserSchema = new Schema(
 
     locations: [
       {
-        addressId: {
-          type: Schema.Types.ObjectId,
-          ref: "AddressModel",
-        },
+        type: Schema.Types.ObjectId,
+        ref: "addrresses",
+        model: AddressModel,
       },
     ],
 
@@ -69,18 +68,15 @@ const UserSchema = new Schema(
     },
 
     images: {
-      type: String,
-      default:
-        "https://res.cloudinary.com/dvniua4ab/image/upload/c_crop,h_200,q_63,r_30,w_200/v1738597956/doh3dd3gliqihwvudapz.avif",
-      match: [urlPattern, "Please provide a proper URL"],
+      type: Schema.Types.ObjectId,
+      ref: "files",
     },
 
     threads: [
       {
-        threadId: {
-          type: Schema.Types.ObjectId,
-          ref: "ThreadModel", // Verweist auf das Thread-Modell
-        },
+        type: Schema.Types.ObjectId,
+        ref: "threads",
+        model: ThreadModel,
       },
     ],
 
