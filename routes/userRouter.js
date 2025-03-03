@@ -43,8 +43,8 @@ userRouter.get("/allLocationsFromUser/:id", getAllLocationsFromUserById);
 userRouter.get("/", getAll(UserModel));
 userRouter.get("/:id", getOneById(UserModel));
 userRouter.post("/", createOne(UserModel));
-userRouter.put("/:id", restricted, updateOne(UserModel));
-userRouter.delete("/:id", restricted, deleteOne(UserModel));
+userRouter.put("/:id", updateOne(UserModel));
+userRouter.delete("/:id", deleteOne(UserModel));
 
 userRouter.post("/signup", userSignup);
 userRouter.post("/login", userLogin);

@@ -33,6 +33,7 @@ const UserSchema = new Schema(
       type: Boolean,
       default: true,
     },
+    
     roleId: {
       type: Schema.Types.ObjectId,
       ref: "RoleModel", // Verweist auf das Role-Modell

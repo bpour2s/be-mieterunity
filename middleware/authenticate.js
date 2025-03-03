@@ -3,6 +3,7 @@ import ErrorResponse from "../utils/ErrorResponse.js";
 import jwt from "jsonwebtoken";
 
 export default async function authenticate(req, res, next) {
+  console.log(req);
   let { token } = req.cookies;
 
   const { authorization } = req.headers;
