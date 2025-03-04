@@ -22,6 +22,8 @@ import {
   getUserWithAddressesAndThreadsAndImages,
 } from "../controllers/userControllers.js";
 
+import { notFound } from "../controllers/notFoundController.js";
+
 import authenticate from "../middleware/authenticate.js";
 import hasPermissions from "../middleware/hasPermissions.js";
 
@@ -50,5 +52,6 @@ userRouter.post("/signup", userSignup);
 userRouter.post("/login", userLogin);
 userRouter.post("/logout", userLogout);
 userRouter.get("/getMe", authenticate, getMe);
+// userRouter.all("/*", notFound);
 
 export default userRouter;

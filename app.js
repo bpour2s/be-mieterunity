@@ -26,16 +26,6 @@ const allowedOrigins = [
 ];
 
 app.use(
-  cors({
-    origin: (origin, cb) => {
-      if (!origin || allowedOrigins.includes(origin)) cb(null, true);
-      else cb(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-  })
-);
-
-app.use(
   morgan(morganFormat, {
     stream: {
       write: (message) => {
@@ -48,6 +38,16 @@ app.use(
         logger.info(JSON.stringify(logObject));
       },
     },
+  })
+);
+
+app.use(
+  cors({
+    origin: (origin, cb) => {
+      if (!origin || allowedOrigins.includes(origin)) cb(null, true);
+      else cb(new Error("Not allowed by CORS"));
+    },
+    credentials: true,
   })
 );
 

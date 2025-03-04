@@ -5,13 +5,13 @@ const roleSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique: true, // Optional: Stelle sicher, dass Rollennamen eindeutig sind
+      unique: true,
     },
     description: {
       type: String,
     },
     permissions: {
-      type: [String], // Array von Strings
+      type: [String], 
       enum: [
         // Optional: Stelle sicher, dass nur gültige Berechtigungen verwendet werden
         "read_messages",
@@ -22,7 +22,7 @@ const roleSchema = new mongoose.Schema(
         "delete_threads",
         "manage_users",
       ],
-      default: [], // Standardmäßig keine Berechtigungen
+      default: [], 
     },
   },
   {

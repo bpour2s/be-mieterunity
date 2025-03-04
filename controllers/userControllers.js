@@ -77,6 +77,7 @@ const getUserWithAddressesAndThreadsAndImages = asyncHandler(
       .populate({ path: "images", model: FileModel })
       .lean();
 
+    console.log("UserController: ", user);
     if (!user) throw new ErrorResponse("User not found", 404);
     res.json({ data: user });
   }

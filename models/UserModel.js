@@ -7,38 +7,56 @@ import { ThreadModel } from "./ThreadModel.js";
 const urlPattern =
   /[(http(s)?):\/\/(www\.)?a-zA-Z0-9@:%._\+~#=]{2,256}\.[a-z]{2,6}\b([-a-zA-Z0-9@:%_\+.~#?&//=]*)/i;
 
-
-  const locationsObject = new Schema({
-      addressRefId: {
-        type: Schema.Types.ObjectId,
-        ref: "AddressModel",
-
-      },
-
-    });
-
-     const threadsObject = new Schema({
-      threadRefId: {
-      type: Schema.Types.ObjectId,
-      ref: "ThreadModel", // Verweist auf das Thread-Modell
-
-      }
-
-    });
-
-
 const UserSchema = new Schema(
   {
+    roleId: {
+      type: Schema.Types.ObjectId,
+      ref: "roles",
+      model: RoleModel, // Verweist auf das Role-Modell
+      // required: true,
+      // default: ""
+    },
+
+    locations: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "addrresses",
+        model: AddressModel,
+      },
+    ],
+
+    threads: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "threads",
+        model: ThreadModel,
+      },
+    ],
+
+    profilImageId: {
+      type: Schema.Types.ObjectId,
+      ref: "files", // Verweist auf das File-Modell
+      model: FileModel,
+    },
+
+    role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
+    },
+
+    tokens: [
+      {
+        accessToken: {
+          type: String,
+          required: true,
+        },
+      },
+    ],
+
     isFirstLogin: {
       type: Boolean,
       default: true,
-    },
-    
-    roleId: {
-      type: Schema.Types.ObjectId,
-      ref: "RoleModel", // Verweist auf das Role-Modell
-      // required: true,
-      // default: ""
     },
 
     firstName: {
@@ -65,58 +83,18 @@ const UserSchema = new Schema(
       select: false,
     },
 
-    locations: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "addrresses",
-        model: AddressModel,
-      },
-    ],
-
-tokens: [
-  {
-    accessToken: {
-      type: String,
-      required: true,
-    },
-  },
-],
-
-  role: {
-  type: String,
-      enum: ["user", "admin"],
-      default: "user",
-    },
-
-    images: {
-      type: Schema.Types.ObjectId,
-      ref: "files",
-    },
-
-    threads: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: "threads",
-        model: ThreadModel,
-      },
-    ],
-
-  profilImageId: {
-  type: Schema.Types.ObjectId,
-    ref: "FileModel", // Verweist auf das File-Modell
-    },
-
-isAccountDeleted: {
-  type: Boolean,
-      default: false,
-    },
-lastLogin: {
-  type: Date,
+    lastLogin: {
+      type: Date,
       default: null,
     },
+
+    isAccountDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-{
-  timestamps: true,
+  {
+    timestamps: true,
   }
 );
 
