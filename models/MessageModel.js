@@ -11,7 +11,7 @@ const MessageSchema = new Schema(
       model: ThreadModel,
       required: true,
     },
-    
+
     fromUserId: {
       type: Schema.Types.ObjectId,
       ref: "users",
@@ -24,15 +24,18 @@ const MessageSchema = new Schema(
       model: UserModel,
       ref: "users",
     },
-    
-    reactions: {
-      type: Schema.Types.ObjectId,
-      ref: "reactions",
-      model: ReactionModel,
-    },
+
+    reactions: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: "reactions",
+        model: ReactionModel,
+      },
+    ],
 
     message: {
       type: String,
+      required: true,
     },
 
     status: {

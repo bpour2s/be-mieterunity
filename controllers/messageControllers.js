@@ -1,6 +1,9 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 import MessageModel from "../models/MessageModel.js";
+import ThreadModel from "../models/ThreadModel.js";
+import UserModel from "../models/UserModel.js";
+import ReactionModel from "../models/ReactionModel.js";
 
 const getAllMessages = asyncHandler(async (req, res, next) => {
   const messages = await MessageModel.find().lean();
@@ -35,10 +38,24 @@ const deleteMessages = asyncHandler(async (req, res, next) => {
   res.json({ msg: `Successfully deleted`, data: message });
 });
 
+export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const user = await MessageModel.find({ thread: id })
+    .populate({ path: "thread", model: ThreadModel })
+    .populate({ path: "fromUserId", model: UserModel })
+    .populate({ path: "reactions", model: ReactionModel })
+    .lean();
+
+  console.log("UserController: ", user);
+  if (!user) throw new ErrorResponse("User not found", 404);
+  res.json({ data: user });
+});
+
 export default {
   getAllMessages,
   getMessagesById,
   createMessages,
   updateMessages,
   deleteMessages,
+  allMessagesFromThreadId,
 };
