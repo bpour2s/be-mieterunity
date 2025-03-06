@@ -2,7 +2,7 @@ import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
 import ReactionModel from "../models/ReactionModel.js";
 
-const getAllReactions = asyncHandler(async (req, res, next) => {
+export const getAllReactions = asyncHandler(async (req, res, next) => {
   const reactions = await ReactionModel.find().lean();
   res.json({ data: reactions });
 });

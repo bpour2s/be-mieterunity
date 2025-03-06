@@ -1,6 +1,5 @@
 import asyncHandler from "../utils/asyncHandler.js";
 import ErrorResponse from "../utils/ErrorResponse.js";
-import UserModel from "../models/UserModel.js";
 
 const getAll = (Model) =>
   asyncHandler(async (req, res, next) => {

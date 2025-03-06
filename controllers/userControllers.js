@@ -74,9 +74,10 @@ const getUserWithAddressesAndThreadsAndImages = asyncHandler(
     const user = await UserModel.findById(id)
       .populate({ path: "locations", model: AddressModel })
       .populate({ path: "threads", model: ThreadModel })
-      .populate({ path: "images", model: FileModel })
+      .populate({ path: "profilImageId", model: FileModel })
       .lean();
 
+    console.log("UserController: ", user);
     if (!user) throw new ErrorResponse("User not found", 404);
     res.json({ data: user });
   }

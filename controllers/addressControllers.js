@@ -32,8 +32,6 @@ const createAddress = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("Addresse konnte nicht verifiziert werden.", 409);
   }
 
-  
-
   let foundAddress = null;
 
   try {
@@ -45,8 +43,6 @@ const createAddress = asyncHandler(async (req, res, next) => {
     throw new ErrorResponse("Fehler in der Verbindung mit der Datenbank", 400);
   }
 
-  
-
   if (!foundAddress.length) {
     req.body = {
       ...req.body,
@@ -54,12 +50,8 @@ const createAddress = asyncHandler(async (req, res, next) => {
       lon: isVerifiedAddress.lon,
     };
 
-    
-
     try {
       const address = await AddressModel.create(req.body);
-
-      
 
       res.status(201).json({ data: address });
       return;
