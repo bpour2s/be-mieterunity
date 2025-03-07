@@ -51,6 +51,33 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
   res.json({ data: user });
 });
 
+export const allMessagesFromAndToUserId = asyncHandler(
+  async (req, res, next) => {
+    const { id } = req.params;
+
+    const messages = await MessageModel.find({
+      $or: [
+        { fromUserId: id, toUserId: id },
+        { fromUserId: id }, // falls du auch nur die Nachrichten von dem User haben willst
+        { toUserId: id }, // falls du auch nur die Nachrichten an den User haben willst
+      ],
+    })
+      .populate({ path: "fromUserId", model: UserModel })
+      .populate({ path: "toUserId", model: UserModel }) // toUserId auch populaten
+      .populate({ path: "reactions", model: ReactionModel })
+      .sort({ createdAt: 1 }) // Nachrichten nach createdAt in aufsteigender Reihenfolge sortieren (ältestes zuerst)
+      .lean();
+
+    console.log("Messages for User ID:", id, messages);
+
+    if (!messages || messages.length === 0) {
+      return res.json({ data: [] }); // Leeres Array zurückgeben, wenn keine Nachrichten gefunden werden
+    }
+
+    res.json({ data: messages });
+  }
+);
+
 export default {
   getAllMessages,
   getMessagesById,
@@ -58,4 +85,5 @@ export default {
   updateMessages,
   deleteMessages,
   allMessagesFromThreadId,
+  allMessagesFromAndToUserId,
 };
