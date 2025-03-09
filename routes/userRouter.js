@@ -15,12 +15,7 @@ import {
   getMe,
 } from "../controllers/authControllers.js";
 
-import {
-  getAllLocationsFromUserById,
-  getUserWithAddresses,
-  getUserWithAddressesAndThreads,
-  getUserWithAddressesAndThreadsAndImages,
-} from "../controllers/userControllers.js";
+import { allUserInformationsById } from "../controllers/userControllers.js";
 
 import { notFound } from "../controllers/notFoundController.js";
 
@@ -31,16 +26,9 @@ const userRouter = Router();
 
 const restricted = [authenticate, hasPermissions("self", "admin")];
 
-userRouter.get(
-  "/getUserWithAddressesAndThreadsAndImages/:id",
-  getUserWithAddressesAndThreadsAndImages
-);
-userRouter.get(
-  "/userwithaddressesAndThreads/:id",
-  getUserWithAddressesAndThreads
-);
-userRouter.get("/userwithaddresses/:id", getUserWithAddresses);
-userRouter.get("/allLocationsFromUser/:id", getAllLocationsFromUserById);
+
+userRouter.get("/alluserinformationsbyid/:id", allUserInformationsById);
+
 
 userRouter.get("/", getAll(UserModel));
 userRouter.get("/:id", getOneById(UserModel));

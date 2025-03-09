@@ -47,41 +47,18 @@ const getAllLocationsFromUserById = asyncHandler(async (req, res, next) => {
   res.json({ data: user.locations });
 });
 
-const getUserWithAddresses = asyncHandler(async (req, res, next) => {
+const allUserInformationsById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await UserModel.findById(id)
-    .populate({ path: "locations", model: AddressModel })
-    .lean();
-
-  if (!user) throw new ErrorResponse("User not found", 404);
-  res.json({ data: user });
-});
-
-const getUserWithAddressesAndThreads = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  console.log("HIER");
   const user = await UserModel.findById(id)
     .populate({ path: "locations", model: AddressModel })
     .populate({ path: "threads", model: ThreadModel })
+    .populate({ path: "profilImageId", model: FileModel })
     .lean();
 
   if (!user) throw new ErrorResponse("User not found", 404);
   res.json({ data: user });
 });
-
-const getUserWithAddressesAndThreadsAndImages = asyncHandler(
-  async (req, res, next) => {
-    const { id } = req.params;
-    const user = await UserModel.findById(id)
-      .populate({ path: "locations", model: AddressModel })
-      .populate({ path: "threads", model: ThreadModel })
-      .populate({ path: "profilImageId", model: FileModel })
-      .lean();
-
-    console.log("UserController: ", user);
-    if (!user) throw new ErrorResponse("User not found", 404);
-    res.json({ data: user });
-  }
-);
 
 export {
   getAllUsers,
@@ -90,7 +67,5 @@ export {
   updateUser,
   deleteUser,
   getAllLocationsFromUserById,
-  getUserWithAddresses,
-  getUserWithAddressesAndThreads,
-  getUserWithAddressesAndThreadsAndImages,
+  allUserInformationsById,
 };

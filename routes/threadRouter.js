@@ -8,7 +8,11 @@ import {
   deleteOne,
 } from "../controllers/crudFactory.js";
 
+import { findThreadsByAddressId } from "../controllers/threadControllers.js";
+
 const threadRouter = Router();
+
+threadRouter.get("/findThreadsByAddressId/:id", findThreadsByAddressId);
 
 threadRouter.get("/", getAll(ThreadModel));
 threadRouter.get("/:id", getOneById(ThreadModel));
