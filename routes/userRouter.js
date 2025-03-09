@@ -15,7 +15,10 @@ import {
   getMe,
 } from "../controllers/authControllers.js";
 
-import { allUserInformationsById } from "../controllers/userControllers.js";
+import {
+  allUserInformationsById,
+  getUsersByLocationId,
+} from "../controllers/userControllers.js";
 
 import { notFound } from "../controllers/notFoundController.js";
 
@@ -26,9 +29,8 @@ const userRouter = Router();
 
 const restricted = [authenticate, hasPermissions("self", "admin")];
 
-
+userRouter.get("/getUsersByLocationId/:id", getUsersByLocationId);
 userRouter.get("/alluserinformationsbyid/:id", allUserInformationsById);
-
 
 userRouter.get("/", getAll(UserModel));
 userRouter.get("/:id", getOneById(UserModel));

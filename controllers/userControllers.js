@@ -60,6 +60,18 @@ const allUserInformationsById = asyncHandler(async (req, res, next) => {
   res.json({ data: user });
 });
 
+const getUsersByLocationId = asyncHandler(async (req, res, next) => {
+  const { locationId } = req.params;
+
+  try {
+    const users = await UserModel.find({ locations: locationId }).lean();
+    res.status(200).json({ data: users });
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Benutzer:", error);
+    next(new ErrorResponse("Serverfehler beim Abrufen der Benutzer.", 500));
+  }
+});
+
 export {
   getAllUsers,
   getUserById,
@@ -68,4 +80,5 @@ export {
   deleteUser,
   getAllLocationsFromUserById,
   allUserInformationsById,
+  getUsersByLocationId,
 };
