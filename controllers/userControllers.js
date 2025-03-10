@@ -61,10 +61,15 @@ const allUserInformationsById = asyncHandler(async (req, res, next) => {
 });
 
 const getUsersByLocationId = asyncHandler(async (req, res, next) => {
-  const { locationId } = req.params;
+  const { id } = req.params;
 
   try {
-    const users = await UserModel.find({ locations: locationId }).lean();
+    const users = await UserModel.find({ locations: id }).lean();
+    if (!users || users.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No users found for this loaction." });
+    }
     res.status(200).json({ data: users });
   } catch (error) {
     console.error("Fehler beim Abrufen der Benutzer:", error);
