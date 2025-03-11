@@ -75,13 +75,13 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
 
     console.log("UserController: ", messages);
 
-    if (!Array.isArray(messages)) {
-      return res.status(200).json({
-        data: [],
-        error: { msg: "no messages found with threadId" },
-        loading: [false],
-      });
-    }
+    // if (!Array.isArray(messages)) {
+    //   return res.status(200).json({
+    //     data: [],
+    //     error: { msg: "no messages found with threadId" },
+    //     loading: [false],
+    //   });
+    // }
   } catch (error) {
     console.log("UserController: ", error);
     return res.status(500).json({ data: [], loading: false, error });
