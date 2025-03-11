@@ -4,6 +4,7 @@ import MessageModel from "../models/MessageModel.js";
 import ThreadModel from "../models/ThreadModel.js";
 import UserModel from "../models/UserModel.js";
 import ReactionModel from "../models/ReactionModel.js";
+import mongoose from "mongoose";
 
 const getAllMessages = asyncHandler(async (req, res, next) => {
   const messages = await MessageModel.find().lean();
@@ -40,15 +41,50 @@ const deleteMessages = asyncHandler(async (req, res, next) => {
 
 export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await MessageModel.find({ thread: id })
-    .populate({ path: "thread", model: ThreadModel })
-    .populate({ path: "fromUserId", model: UserModel })
-    .populate({ path: "reactions", model: ReactionModel })
-    .lean();
+  if (!id || id === null || id === "null") {
+    console.log("UserController: ");
+    return res.status(500).json({
+      data: [],
+      loading: false,
+      error: { msg: "null als Wert bekommen" },
+    });
+  }
 
-  console.log("UserController: ", user);
-  if (!user) throw new ErrorResponse("User not found", 404);
-  res.json({ data: user });
+  // if (!mongoose.Types.ObjectId.isValid(id)) {
+  //   console.log("UserController: - Parameter id is not an valid ObjectId");
+  //   return res.status(500).json({
+  //     data: [],
+  //     loading: false,
+  //     error: { msg: "null als Wert bekommen" },
+  //   });
+  // }
+
+  try {
+    const objectId = new mongoose.Types.ObjectId(id);
+    const messages = await MessageModel.find({
+      thread: new mongoose.Types.ObjectId(objectId),
+    })
+      .populate({ path: "thread", model: ThreadModel })
+      .populate({ path: "fromUserId", model: UserModel })
+      .populate({ path: "reactions", model: ReactionModel })
+      .sort({ createdAt: 1 }) // Hier sortieren wir nach createdAt in aufsteigender Reihenfolge (älteste zuerst)
+      .lean();
+    console.log("UserController: ", messages);
+
+    if (!messages || messages.length === 0) {
+      return res.status(200).json({
+        data: [],
+        error: { msg: "no messages found with threadId" },
+        loading: [false],
+      });
+    }
+  } catch (error) {
+    console.log("UserController: ", error);
+    return res.status(500).json({ data: [], loading: false, error });
+  }
+
+  console.log("ERFOLG BEI DER THREAID : ", messages);
+  res.json({ data: messages || [], loading: false, error });
 });
 
 export const allMessagesFromAndToUserId = asyncHandler(
@@ -77,6 +113,39 @@ export const allMessagesFromAndToUserId = asyncHandler(
     res.json({ data: messages });
   }
 );
+
+export const allMessagesFromTo = asyncHandler(async (req, res, next) => {
+  const { fromUserId, toUserId } = req.params;
+  console.log(req.params);
+
+  if (!fromUserId || !toUserId) {
+    return next(new ErrorResponse("fromUserId and toUserId are required", 400));
+  }
+
+  const messages = await MessageModel.find({
+    $or: [
+      { fromUserId: fromUserId, toUserId: toUserId },
+      { fromUserId: toUserId, toUserId: fromUserId },
+    ],
+    thread: { $eq: null }, // Nachrichten ohne threadId
+  })
+    .populate({ path: "fromUserId", model: UserModel })
+    .populate({ path: "toUserId", model: UserModel })
+    .populate({ path: "reactions", model: ReactionModel })
+    .sort({ createdAt: 1 })
+    .lean();
+
+  console.log(
+    `Messages between ${fromUserId} and ${toUserId} (excluding threads):`,
+    messages
+  );
+
+  if (!messages || messages.length === 0) {
+    return res.json({ data: [] });
+  }
+
+  res.json({ data: messages });
+});
 
 export default {
   getAllMessages,
