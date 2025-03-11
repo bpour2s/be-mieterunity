@@ -18,8 +18,10 @@ const getMessagesById = asyncHandler(async (req, res, next) => {
   res.json({ data: message });
 });
 
-const createMessages = asyncHandler(async (req, res, next) => {
-  const message = await MessageModel.create(req.body);
+export const createMessages = asyncHandler(async (req, res, next) => {
+  console.log("REQUEST", req.params);
+
+  // const message = await MessageModel.create(req.body);
   res.status(201).json({ data: message });
 });
 
@@ -69,7 +71,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
       .populate({ path: "reactions", model: ReactionModel })
       .sort({ createdAt: 1 }) // Hier sortieren wir nach createdAt in aufsteigender Reihenfolge (älteste zuerst)
       .lean();
-    console.log("UserController: ", messages);
+    // console.log("UserController: ", messages);
 
     if (!messages || messages.length === 0) {
       return res.status(200).json({
@@ -83,7 +85,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
     return res.status(500).json({ data: [], loading: false, error });
   }
 
-  console.log("ERFOLG BEI DER THREAID : ", messages);
+  // console.log("ERFOLG BEI DER THREADID : ", messages);
   res.json({ data: messages || [], loading: false, error });
 });
 

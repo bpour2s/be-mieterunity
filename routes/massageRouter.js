@@ -11,6 +11,7 @@ import {
 import {
   allMessagesFromThreadId,
   allMessagesFromTo,
+  createMessages,
 } from "../controllers/messageControllers.js";
 
 const messageRouter = Router();
@@ -22,7 +23,7 @@ messageRouter.get(
 );
 
 messageRouter.get("/", getAll(MessageModel));
-messageRouter.get("/:id", getOneById(MessageModel));
+messageRouter.get("/:id", createMessages);
 messageRouter.post("/", createOne(MessageModel));
 messageRouter.put("/:id", updateOne(MessageModel));
 messageRouter.delete("/:id", deleteOne(MessageModel));
