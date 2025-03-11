@@ -70,7 +70,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
       .lean();
 
     console.log("ERFOLG BEI DER THREADID : ", messages);
-    res.json({ data: messages || [], loading: false, error });
+    res.json({ data: messages || [], loading: false, error: null });
   } catch (error) {
     console.log("UserController: ", error);
     return res.status(500).json({ data: [], loading: false, error: null });
