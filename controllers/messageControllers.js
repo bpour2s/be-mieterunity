@@ -21,7 +21,13 @@ const getMessagesById = asyncHandler(async (req, res, next) => {
 export const createMessages = asyncHandler(async (req, res, next) => {
   console.log("REQUEST", req.params);
 
-  // const message = await MessageModel.create(req.body);
+  try {
+    const message = await MessageModel.create(req.body);
+  } catch (error) {
+    console.log("UserController: CreateMessages", error);
+
+    return res.status(500).json({ data: message, loading: false, error });
+  }
   res.status(201).json({ data: message });
 });
 
@@ -42,9 +48,12 @@ const deleteMessages = asyncHandler(async (req, res, next) => {
 });
 
 export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
+  console.log("FUNCTION - allMessagesFromThreadId ");
   const { id } = req.params;
+
   if (!id || id === null || id === "null") {
-    console.log("UserController: ");
+    console.log("UserController: ERROR-id nicht gefunden");
+
     return res.status(500).json({
       data: [],
       loading: false,
@@ -52,17 +61,12 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
     });
   }
 
-  // if (!mongoose.Types.ObjectId.isValid(id)) {
-  //   console.log("UserController: - Parameter id is not an valid ObjectId");
-  //   return res.status(500).json({
-  //     data: [],
-  //     loading: false,
-  //     error: { msg: "null als Wert bekommen" },
-  //   });
-  // }
+  console.log("UserController: Id gefunden");
 
   try {
     const objectId = new mongoose.Types.ObjectId(id);
+    console.log("UserController: ObejctId erzeugt gefunden");
+
     const messages = await MessageModel.find({
       thread: new mongoose.Types.ObjectId(objectId),
     })
@@ -71,9 +75,10 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
       .populate({ path: "reactions", model: ReactionModel })
       .sort({ createdAt: 1 }) // Hier sortieren wir nach createdAt in aufsteigender Reihenfolge (älteste zuerst)
       .lean();
-    // console.log("UserController: ", messages);
 
-    if (!messages || messages.length === 0) {
+    console.log("UserController: ", messages);
+
+    if (Array.isArray(messages)) {
       return res.status(200).json({
         data: [],
         error: { msg: "no messages found with threadId" },
@@ -85,7 +90,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
     return res.status(500).json({ data: [], loading: false, error });
   }
 
-  // console.log("ERFOLG BEI DER THREADID : ", messages);
+  console.log("ERFOLG BEI DER THREADID : ", messages);
   res.json({ data: messages || [], loading: false, error });
 });
 
