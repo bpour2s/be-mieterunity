@@ -18,7 +18,7 @@ const ThreadSchema = new Schema(
       model: CategoryModel,
       required: true,
     },
-    
+
     createdFromUserId: {
       type: Schema.Types.ObjectId, // Verweis auf den Benutzer, der den Thread erstellt hat
       ref: "users", // Verweist auf das User-Modell
@@ -32,7 +32,6 @@ const ThreadSchema = new Schema(
     },
 
     // messages: [messagesObject],
-
 
     closedAt: {
       type: Date, // Datum, an dem der Thread geschlossen wurde (optional)

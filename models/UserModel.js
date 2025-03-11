@@ -19,9 +19,10 @@ const UserSchema = new Schema(
 
     locations: [
       {
-        type: Schema.Types.ObjectId,
-        ref: "addrresses",
-        model: AddressModel,
+        type: String,
+        // type: Schema.Types.ObjectId,
+        // ref: "addrresses",
+        // model: AddressModel,
       },
     ],
 

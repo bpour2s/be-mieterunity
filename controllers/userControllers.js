@@ -47,41 +47,35 @@ const getAllLocationsFromUserById = asyncHandler(async (req, res, next) => {
   res.json({ data: user.locations });
 });
 
-const getUserWithAddresses = asyncHandler(async (req, res, next) => {
+const allUserInformationsById = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
-  const user = await UserModel.findById(id)
-    .populate({ path: "locations", model: AddressModel })
-    .lean();
-
-  if (!user) throw new ErrorResponse("User not found", 404);
-  res.json({ data: user });
-});
-
-const getUserWithAddressesAndThreads = asyncHandler(async (req, res, next) => {
-  const { id } = req.params;
+  console.log("HIER");
   const user = await UserModel.findById(id)
     .populate({ path: "locations", model: AddressModel })
     .populate({ path: "threads", model: ThreadModel })
+    .populate({ path: "profilImageId", model: FileModel })
     .lean();
 
   if (!user) throw new ErrorResponse("User not found", 404);
   res.json({ data: user });
 });
 
-const getUserWithAddressesAndThreadsAndImages = asyncHandler(
-  async (req, res, next) => {
-    const { id } = req.params;
-    const user = await UserModel.findById(id)
-      .populate({ path: "locations", model: AddressModel })
-      .populate({ path: "threads", model: ThreadModel })
-      .populate({ path: "profilImageId", model: FileModel })
-      .lean();
+const getUsersByLocationId = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
 
-    console.log("UserController: ", user);
-    if (!user) throw new ErrorResponse("User not found", 404);
-    res.json({ data: user });
+  try {
+    const users = await UserModel.find({ locations: id }).lean();
+    if (!users || users.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No users found for this loaction." });
+    }
+    res.status(200).json({ data: users });
+  } catch (error) {
+    console.error("Fehler beim Abrufen der Benutzer:", error);
+    next(new ErrorResponse("Serverfehler beim Abrufen der Benutzer.", 500));
   }
-);
+});
 
 export {
   getAllUsers,
@@ -90,7 +84,6 @@ export {
   updateUser,
   deleteUser,
   getAllLocationsFromUserById,
-  getUserWithAddresses,
-  getUserWithAddressesAndThreads,
-  getUserWithAddressesAndThreadsAndImages,
+  allUserInformationsById,
+  getUsersByLocationId,
 };

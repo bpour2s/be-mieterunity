@@ -8,17 +8,22 @@ import {
   deleteOne,
 } from "../controllers/crudFactory.js";
 
-import { allMessagesFromThreadId, allMessagesFromAndToUserId } from "../controllers/messageControllers.js";
+import {
+  allMessagesFromThreadId,
+  allMessagesFromTo,
+  createMessages,
+} from "../controllers/messageControllers.js";
 
 const messageRouter = Router();
 
 messageRouter.get("/allMessagesFromThreadId/:id", allMessagesFromThreadId);
-messageRouter.get("/allMessagesFromAndToUserId/:id", allMessagesFromAndToUserId);
-
-
+messageRouter.get(
+  "/allMessagesFromTo/:fromUserId/:toUserId",
+  allMessagesFromTo
+);
 
 messageRouter.get("/", getAll(MessageModel));
-messageRouter.get("/:id", getOneById(MessageModel));
+messageRouter.get("/:id", createMessages);
 messageRouter.post("/", createOne(MessageModel));
 messageRouter.put("/:id", updateOne(MessageModel));
 messageRouter.delete("/:id", deleteOne(MessageModel));

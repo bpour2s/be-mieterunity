@@ -23,6 +23,7 @@ export default async function authenticate(req, res, next) {
   } catch (error) {
     next(error);
   }
+  const destDir = "./../uploads/images/"
 }
 
 // headers: {

@@ -35,10 +35,18 @@ const deleteThread = asyncHandler(async (req, res, next) => {
   res.json({ msg: `Successfully deleted`, data: thread });
 });
 
-export default {
+const findThreadsByAddressId = asyncHandler(async (req, res, next) => {
+  const { id } = req.params;
+  const threads = await ThreadModel.find({ addressId: id });
+  if (!threads) throw new ErrorResponse("Threads not found by AddressId", 404);
+  res.json({ data: threads });
+});
+
+export {
   getAllThreads,
   getThreadById,
   createThread,
   updateThread,
   deleteThread,
+  findThreadsByAddressId,
 };
