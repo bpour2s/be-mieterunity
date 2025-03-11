@@ -69,7 +69,6 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
       .sort({ createdAt: 1 }) // Hier sortieren wir nach createdAt in aufsteigender Reihenfolge (älteste zuerst)
       .lean();
 
-    console.log("ERFOLG BEI DER THREADID : ", messages);
     res.json({ data: messages || [], loading: false, error: null });
   } catch (error) {
     console.log("UserController: ", error);
