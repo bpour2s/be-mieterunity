@@ -42,6 +42,7 @@ userRouter.get(
 userRouter.get("/userwithaddresses/:id", getUserWithAddresses);
 userRouter.get("/allLocationsFromUser/:id", getAllLocationsFromUserById);
 
+
 userRouter.get("/", getAll(UserModel));
 userRouter.get("/:id", getOneById(UserModel));
 userRouter.post("/", createOne(UserModel));

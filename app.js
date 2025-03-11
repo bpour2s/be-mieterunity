@@ -2,6 +2,8 @@ import express from "express";
 import cors from "cors";
 import morgan from "morgan";
 import logger from "./utils/logger.js";
+import path from "path";
+import { fileURLToPath } from 'url';
 
 import errorHandler from "./utils/errorHandler.js";
 import ErrorResponse from "./utils/ErrorResponse.js";
@@ -14,6 +16,13 @@ import addressRouter from "./routes/addressRouter.js";
 import reactionRouter from "./routes/reactionRouter.js";
 import fileRouter from "./routes/fileRouter.js";
 import threadRouter from "./routes/threadRouter.js";
+//import upload from "./middleware/Upload.js";
+import addUploadRoute from './middleware/Upload.js';
+
+// Ermitteln des aktuellen Verzeichnisses
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
 
 const app = express();
 const morganFormat = ":method :url :status :response-time ms";
@@ -53,6 +62,10 @@ app.use(
 
 app.use(express.json());
 
+addUploadRoute(app);
+
+app.use('/uploads', express.static(path.join(__dirname, 'public', 'uploads')));
+app.use("/files", fileRouter);
 app.use("/users", userRouter);
 app.use("/roles", roleRouter);
 app.use("/messages", messageRouter);
@@ -62,9 +75,15 @@ app.use("/reactions", reactionRouter);
 app.use("/files", fileRouter);
 app.use("/threads", threadRouter);
 
+app.use((err, req, res, next) => {
+  res.status(err.statusCode || 500).json({ msg: err.message });
+});
+
+
 app.use("*", (req, res, next) => {
   next(new ErrorResponse(`Cannot find ${req.originalUrl}`, 404));
 });
+
 
 app.use(errorHandler);
 

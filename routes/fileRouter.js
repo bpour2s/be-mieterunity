@@ -7,8 +7,11 @@ import {
   updateOne,
   deleteOne,
 } from "../controllers/crudFactory.js";
+import addUploadRoute from "../middleware/Upload.js"
 
 const fileRouter = Router();
+
+
 
 fileRouter.get("/", getAll(FileModel));
 fileRouter.get("/:id", getOneById(FileModel));
