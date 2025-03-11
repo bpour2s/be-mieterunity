@@ -52,16 +52,12 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
   const { id } = req.params;
 
   if (!id || id === null || id === "null") {
-    console.log("UserController: ERROR-id nicht gefunden");
-
     return res.status(500).json({
       data: [],
       loading: false,
       error: { msg: "null als Wert bekommen" },
     });
   }
-
-  console.log("UserController: Id gefunden");
 
   try {
     const messages = await MessageModel.find({
@@ -73,22 +69,12 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
       .sort({ createdAt: 1 }) // Hier sortieren wir nach createdAt in aufsteigender Reihenfolge (älteste zuerst)
       .lean();
 
-    console.log("UserController: ", messages);
-
-    // if (!Array.isArray(messages)) {
-    //   return res.status(200).json({
-    //     data: [],
-    //     error: { msg: "no messages found with threadId" },
-    //     loading: [false],
-    //   });
-    // }
+    console.log("ERFOLG BEI DER THREADID : ", messages);
+    res.json({ data: messages || [], loading: false, error });
   } catch (error) {
     console.log("UserController: ", error);
-    return res.status(500).json({ data: [], loading: false, error });
+    return res.status(500).json({ data: [], loading: false, error: null });
   }
-
-  console.log("ERFOLG BEI DER THREADID : ", messages);
-  res.json({ data: messages || [], loading: false, error });
 });
 
 export const allMessagesFromAndToUserId = asyncHandler(
