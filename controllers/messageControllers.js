@@ -72,7 +72,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
     res.json({ data: messages || [], loading: false, error: null });
   } catch (error) {
     console.log("UserController: ", error);
-    return res.status(500).json({ data: [], loading: false, error: null });
+    return res.status(500).json({ data: [], loading: false, error });
   }
 });
 
