@@ -64,11 +64,8 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
   console.log("UserController: Id gefunden");
 
   try {
-    const objectId = new mongoose.Types.ObjectId(id);
-    console.log("UserController: ObejctId erzeugt gefunden");
-
     const messages = await MessageModel.find({
-      thread: new mongoose.Types.ObjectId(objectId),
+      thread: id,
     })
       .populate({ path: "thread", model: ThreadModel })
       .populate({ path: "fromUserId", model: UserModel })
@@ -78,7 +75,7 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
 
     console.log("UserController: ", messages);
 
-    if (Array.isArray(messages)) {
+    if (!Array.isArray(messages)) {
       return res.status(200).json({
         data: [],
         error: { msg: "no messages found with threadId" },
