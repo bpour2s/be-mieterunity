@@ -12,10 +12,15 @@ import {
   allMessagesFromThreadId,
   allMessagesFromTo,
   createMessages,
+  allMessagesFromAndToUserId,
 } from "../controllers/messageControllers.js";
 
 const messageRouter = Router();
 
+messageRouter.get(
+  "/allMessagesFromAndToUserId/:id/:id",
+  allMessagesFromAndToUserId
+);
 messageRouter.get("/allMessagesFromThreadId/:id", allMessagesFromThreadId);
 messageRouter.get(
   "/allMessagesFromTo/:fromUserId/:toUserId",

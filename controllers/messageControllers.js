@@ -78,25 +78,38 @@ export const allMessagesFromThreadId = asyncHandler(async (req, res, next) => {
 
 export const allMessagesFromAndToUserId = asyncHandler(
   async (req, res, next) => {
-    const { id } = req.params;
+    const { userId1, userId2 } = req.params;
 
     const messages = await MessageModel.find({
       $or: [
-        { fromUserId: id, toUserId: id },
-        { fromUserId: id }, // falls du auch nur die Nachrichten von dem User haben willst
-        { toUserId: id }, // falls du auch nur die Nachrichten an den User haben willst
+        {
+          fromUserId: userId1,
+          toUserId: userId2,
+          threadId: { $exists: false },
+        },
+        {
+          fromUserId: userId2,
+          toUserId: userId1,
+          threadId: { $exists: false },
+        },
       ],
     })
       .populate({ path: "fromUserId", model: UserModel })
-      .populate({ path: "toUserId", model: UserModel }) // toUserId auch populaten
+      .populate({ path: "toUserId", model: UserModel })
       .populate({ path: "reactions", model: ReactionModel })
-      .sort({ createdAt: 1 }) // Nachrichten nach createdAt in aufsteigender Reihenfolge sortieren (ältestes zuerst)
+      .sort({ createdAt: 1 })
       .lean();
 
-    console.log("Messages for User ID:", id, messages);
+    console.log(
+      "One-to-One Messages between User IDs:",
+      userId1,
+      "and",
+      userId2,
+      messages
+    );
 
     if (!messages || messages.length === 0) {
-      return res.json({ data: [] }); // Leeres Array zurückgeben, wenn keine Nachrichten gefunden werden
+      return res.json({ data: [] });
     }
 
     res.json({ data: messages });
