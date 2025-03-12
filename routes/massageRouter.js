@@ -16,11 +16,11 @@ import {
 } from "../controllers/messageControllers.js";
 
 const messageRouter = Router();
-
 messageRouter.get(
-  "/allMessagesFromAndToUserId/:id/:id",
+  "/allMessagesFromAndToUserId/:userId1/:userId2",
   allMessagesFromAndToUserId
 );
+
 messageRouter.get("/allMessagesFromThreadId/:id", allMessagesFromThreadId);
 messageRouter.get(
   "/allMessagesFromTo/:fromUserId/:toUserId",
